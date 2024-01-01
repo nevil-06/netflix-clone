@@ -2,8 +2,8 @@
 
 git init
 
-git config user.name "Your Name"
-git config user.email "your@email.com"
+git config user.name "Nevil"
+git config user.email "nevilitaliya00@gmail.com"
 
 commit_date="2024-01-01T09:00:00"
 
