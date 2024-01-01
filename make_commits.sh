@@ -23,12 +23,13 @@ declare -a commits=(
 for entry in "${commits[@]}"; do
     IFS=":" read -r message path <<< "$entry"
 
+    # Create path if missing
     if [[ ! -e "$path" ]]; then
-      mkdir -p "$path"
-      if [[ "$path" == *"/"* ]]; then
-        echo "// dummy file for $message" > "$path/dummy.txt"
+      if [[ "$path" == *"/" ]]; then
+        mkdir -p "$path"
+        echo "// Dummy file for commit: $message" > "$path/dummy.txt"
       else
-        echo "// dummy file for $message" > "$path"
+        echo "// Dummy file for commit: $message" > "$path"
       fi
     fi
 
@@ -36,7 +37,8 @@ for entry in "${commits[@]}"; do
     GIT_COMMITTER_DATE="$commit_date" git commit -m "$message" --date="$commit_date"
     echo "Committed: $message at $commit_date"
 
-    commit_date=$(date -d "$commit_date + 1 day" "+%Y-%m-%dT%H:%M:%S")
+    # Increment date by 1 day on macOS
+    commit_date=$(date -j -v+1d -f "%Y-%m-%dT%H:%M:%S" "$commit_date" "+%Y-%m-%dT%H:%M:%S")
 done
 
 echo "🎉 Finished creating a realistic commit history!"
